@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import NoteItem from "../components/NoteItem";
 import NoteInput from "../components/NoteInput";
+import NoteDeleteModal from "../components/NonteDeleteModal";
 
 // Sample initial notes data
 const initialNotes = [
@@ -37,8 +38,10 @@ const initialNotes = [
 export default function NotesScreen() {
   const [notes, setNotes] = useState(initialNotes);
   const [modalVisible, setModalVisible] = useState(false);
+  const [deleteModalVisivle, setDeleteModalVisible] = useState(false);
   const [noteText, setNoteText] = useState("");
   const [editingNote, setEditingNote] = useState(null);
+  const [noteToDelete, setNoteToDelete] = useState(null);
 
   // Function to add a new note
   const saveNote = () => {
@@ -77,9 +80,15 @@ export default function NotesScreen() {
   };
 
   // Function to delete a note
-  const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
+  const deleteNote = () => {
+    setNotes(notes.filter((note) => note.id !== noteToDelete));
+    closeDeleteModal();
   };
+
+  const askDeleteNote = (id) => {
+    setNoteToDelete(id);
+    setDeleteModalVisible(true);
+  }
 
   // Function to open edit mode
   const editNote = (note) => {
@@ -93,7 +102,12 @@ export default function NotesScreen() {
     setModalVisible(false);
     setNoteText("");
     setEditingNote(null);
-    };
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalVisible(false);
+    setNoteToDelete(-1);
+  }
 
   return (
     <View style={styles.container}>
@@ -115,7 +129,7 @@ export default function NotesScreen() {
         <FlatList
           data={notes}
           renderItem={({ item }) => (
-            <NoteItem note={item} onEdit={editNote} onDelete={deleteNote} />
+            <NoteItem note={item} onEdit={editNote} onDelete={askDeleteNote} />
           )}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.notesList}
@@ -133,6 +147,12 @@ export default function NotesScreen() {
         noteText={noteText}
         setNoteText={setNoteText}
         isEditing={!!editingNote}
+      />
+
+      <NoteDeleteModal
+        visible={deleteModalVisivle}
+        onClose={closeDeleteModal}
+        onDelete={deleteNote} 
       />
     </View>
   );
