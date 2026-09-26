@@ -106,7 +106,7 @@ export default function NotesScreen() {
 
   const closeDeleteModal = () => {
     setDeleteModalVisible(false);
-    setNoteToDelete(-1);
+    setNoteToDelete(null);
   }
 
   return (
