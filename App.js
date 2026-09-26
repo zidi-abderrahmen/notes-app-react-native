@@ -13,18 +13,14 @@ export default function App() {
           name="Home"
           component={HomeScreen}
           options={{
-            title: "Notes App",
-            headerStyle: {
-              backgroundColor: "#f4511e",
-            },
-            headerTintColor: "#fff",
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="Notes"
           component={NotesScreen}
           options={{
-            title: "My Notes",
+            headerShown: false,
           }}
         />
       </Stack.Navigator>
